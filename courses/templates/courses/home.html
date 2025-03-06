@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>{{ title }}</title>
+    <title>Домашняя страница</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 20px; }
+        h1 { color: #2c3e50; text-align: center; }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { color: #e74c3c; }
+        p { text-align: center; }
     </style>
 </head>
 <body>
-    <h1>Welcome to {{ title }}</h1>
-    <p>Это система для обучения программированию. Перейди к <a href="/courses/">курсам</a>.</p>
+    <h1>Добро пожаловать в EduSystem</h1>
+    <p>
+        Это система для обучения программированию.<br>
+        {% if user.is_authenticated %}
+            Привет, {{ user.FIO }}! (<a href="{% url 'logout' %}">Выйти</a>)<br>
+            <a href="{% url 'course_list' %}">Перейти к курсам</a>
+        {% else %}
+            <a href="{% url 'login' %}">Войти</a>  <!-- Проблема может быть здесь -->
+        {% endif %}
+    </p>
 </body>
 </html>

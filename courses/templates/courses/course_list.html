@@ -3,18 +3,54 @@
 <head>
     <title>Courses</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        ul { list-style-type: none; padding: 0; }
-        li { margin: 10px 0; background: #f9f9f9; padding: 10px; border-radius: 5px; }
+        body { font-family: 'Arial', sans-serif; margin: 20px; background-color: #f4f4f9; color: #333; }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 30px; font-size: 2.5em; }
+        ul { list-style-type: none; padding: 0; max-width: 900px; margin: 0 auto; }
+        li { margin: 15px 0; background: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        li:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
+        .section { margin-top: 15px; }
+        .section strong { color: #2c3e50; font-size: 1.1em; }
+        .text-content { background: #fff; padding: 15px; border-left: 4px solid #2ecc71; border-radius: 5px; line-height: 1.6; }
+        .photo-content img { max-width: 100%; height: auto; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 10px; }
+        .video { border: 1px solid #ddd; padding: 5px; border-radius: 5px; overflow: hidden; }
+        .video iframe { width: 100%; max-width: 560px; height: 315px; border: none; }
+        a { color: #2980b9; text-decoration: none; font-weight: bold; }
+        a:hover { color: #e74c3c; }
+        @media (max-width: 600px) { h1 { font-size: 2em; } li { padding: 15px; } .video iframe { height: 200px; } }
     </style>
 </head>
 <body>
     <h1>Available Courses</h1>
     <ul>
     {% for course in courses %}
-        <li>{{ course.title }} (Code: {{ course.code }})<br>
-            Period: {{ course.start_date }} - {{ course.end_date }}</li>
+        <li>
+            <strong>{{ course.title }}</strong> (Code: {{ course.code }})<br>
+            Period: {{ course.start_date|date:"F d, Y" }} - {{ course.end_date|date:"F d, Y" }}<br>
+            {% for section in course.coursesection_set.all %}
+                <div class="section">
+                    {% if section.title %}<strong>{{ section.title }}</strong>{% endif %}<br>
+                    {% if section.custom_content_text %}
+                        <div class="text-content">{{ section.custom_content_text|linebreaks }}</div>
+                    {% endif %}
+                    {% if section.custom_photo %}
+                        <div class="photo-content"><img src="{{ section.custom_photo.url }}" alt="{{ section.title }}"></div>
+                    {% endif %}
+                    {% if section.custom_video_embed %}
+                        <div class="video">
+                            <iframe src="{{ section.custom_video_embed }}" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    {% endif %}
+                    {% if section.custom_link %}
+                        <a href="{{ section.custom_link }}" target="_blank">{{ section.custom_link }}</a>
+                    {% endif %}
+                    {% if section.library_material %}
+                        <p>Based on Library Material: {{ section.library_material.title }}</p>
+                    {% endif %}
+                </div>
+            {% empty %}
+                No sections available.
+            {% endfor %}
+        </li>
     {% endfor %}
     </ul>
 </body>

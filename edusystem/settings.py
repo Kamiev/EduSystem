@@ -20,6 +20,8 @@ INSTALLED_APPS = [
     'courses',
 ]
 
+AUTH_USER_MODEL = 'courses.User'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -74,3 +76,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Media settings
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
